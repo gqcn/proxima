@@ -1,0 +1,8 @@
+gfcli:
+  gen:
+    dao:
+      - link: "mysql:root:12345678@tcp(srv.com:3306)/user"
+        descriptionTag: true
+
+    pbentity:
+      - link: "mysql:root:12345678@tcp(srv.com:3306)/user"
