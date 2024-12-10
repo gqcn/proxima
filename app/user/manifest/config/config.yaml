@@ -1,0 +1,8 @@
+grpc:
+  name:             "user"        # 服务名称  
+  address:          ":32001"      # 自定义服务监听地址  
+
+database:
+  default:
+    link:  "mysql:root:12345678@tcp(srv.com:3306)/user"
+    debug: true

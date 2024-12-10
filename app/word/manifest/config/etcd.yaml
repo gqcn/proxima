@@ -1,0 +1,2 @@
+etcd:
+  address: "srv.com:2379"
