@@ -16,6 +16,9 @@ func (c *ControllerV1) Detail(ctx context.Context, req *v1.DetailReq) (res *v1.D
 		client = words.NewWordsClient(conn)
 	)
 
+	ctx, cancel := context.WithTimeout(ctx, utility.Timeout)
+	defer cancel()
+
 	word, err := client.Get(ctx, &words.GetReq{
 		Id: uint32(req.Id),
 	})
