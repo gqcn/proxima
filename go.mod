@@ -3,10 +3,10 @@ module proxima
 go 1.23.4
 
 require (
-	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.8.1
-	github.com/gogf/gf/contrib/registry/etcd/v2 v2.8.1
-	github.com/gogf/gf/contrib/rpc/grpcx/v2 v2.8.1
-	github.com/gogf/gf/v2 v2.8.1
+	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.8.2
+	github.com/gogf/gf/contrib/registry/etcd/v2 v2.8.2
+	github.com/gogf/gf/contrib/rpc/grpcx/v2 v2.8.2
+	github.com/gogf/gf/v2 v2.8.2
 	google.golang.org/grpc v1.68.1
 	google.golang.org/protobuf v1.35.2
 )
@@ -23,13 +23,13 @@ require (
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
-	github.com/gogf/gf/contrib/registry/file/v2 v2.8.1 // indirect
+	github.com/gogf/gf/contrib/registry/file/v2 v2.8.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/grokify/html-strip-tags-go v0.1.0 // indirect
-	github.com/magiconair/properties v1.8.7 // indirect
+	github.com/magiconair/properties v1.8.9 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
