@@ -18,6 +18,7 @@ var (
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
 			s.Group("/", func(group *ghttp.RouterGroup) {
+				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Group("/v1", func(group *ghttp.RouterGroup) {
 					group.Group("/", func(group *ghttp.RouterGroup) {
 						group.Bind(user.NewV1())
