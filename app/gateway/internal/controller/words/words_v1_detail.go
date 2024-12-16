@@ -4,16 +4,12 @@ import (
 	"context"
 
 	"github.com/gogf/gf/v2/errors/gerror"
-	"proxima/app/gateway/utility"
 	words "proxima/app/word/api/words/v1"
 
 	"proxima/app/gateway/api/words/v1"
 )
 
 func (c *ControllerV1) Detail(ctx context.Context, req *v1.DetailReq) (res *v1.DetailRes, err error) {
-	ctx, cancel := context.WithTimeout(ctx, utility.Timeout)
-	defer cancel()
-
 	word, err := c.WordsClient.Get(ctx, &words.GetReq{
 		Id: uint32(req.Id),
 	})
