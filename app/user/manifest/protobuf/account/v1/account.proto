@@ -1,5 +1,3 @@
-// protoc --go_out=plugins=grpc:. *.proto
-
 syntax = "proto3";
 
 package account.v1;
