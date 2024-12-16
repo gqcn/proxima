@@ -11,15 +11,10 @@ import (
 )
 
 func (c *ControllerV1) Detail(ctx context.Context, req *v1.DetailReq) (res *v1.DetailRes, err error) {
-	var (
-		conn   = utility.WordClientConn()
-		client = words.NewWordsClient(conn)
-	)
-
 	ctx, cancel := context.WithTimeout(ctx, utility.Timeout)
 	defer cancel()
 
-	word, err := client.Get(ctx, &words.GetReq{
+	word, err := c.WordsClient.Get(ctx, &words.GetReq{
 		Id: uint32(req.Id),
 	})
 

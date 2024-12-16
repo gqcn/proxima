@@ -5,11 +5,19 @@
 package words
 
 import (
+	"github.com/gogf/gf/contrib/rpc/grpcx/v2"
 	"proxima/app/gateway/api/words"
+	v1 "proxima/app/word/api/words/v1"
 )
 
-type ControllerV1 struct{}
+type ControllerV1 struct {
+	WordsClient v1.WordsClient
+}
 
 func NewV1() words.IWordsV1 {
-	return &ControllerV1{}
+	var conn = grpcx.Client.MustNewGrpcClientConn("word")
+
+	return &ControllerV1{
+		WordsClient: v1.NewWordsClient(conn),
+	}
 }

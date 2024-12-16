@@ -5,11 +5,19 @@
 package user
 
 import (
+	"github.com/gogf/gf/contrib/rpc/grpcx/v2"
 	"proxima/app/gateway/api/user"
+	v1 "proxima/app/user/api/account/v1"
 )
 
-type ControllerV1 struct{}
+type ControllerV1 struct {
+	AccountClient v1.AccountClient
+}
 
 func NewV1() user.IUserV1 {
-	return &ControllerV1{}
+	var conn = grpcx.Client.MustNewGrpcClientConn("user")
+
+	return &ControllerV1{
+		AccountClient: v1.NewAccountClient(conn),
+	}
 }

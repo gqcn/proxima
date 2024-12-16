@@ -10,15 +10,10 @@ import (
 )
 
 func (c *ControllerV1) Create(ctx context.Context, req *v1.CreateReq) (res *v1.CreateRes, err error) {
-	var (
-		conn   = utility.WordClientConn()
-		client = words.NewWordsClient(conn)
-	)
-
 	ctx, cancel := context.WithTimeout(ctx, utility.Timeout)
 	defer cancel()
 
-	_, err = client.Create(ctx, &words.CreateReq{
+	_, err = c.WordsClient.Create(ctx, &words.CreateReq{
 		Uid:        1,
 		Word:       req.Word,
 		Definition: req.Definition,
