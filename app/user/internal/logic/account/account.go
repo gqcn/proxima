@@ -1,3 +1,4 @@
+// Package account implements the business logic for user account management
 package account
 
 import (
@@ -13,28 +14,36 @@ import (
 )
 
 var (
+    // jwtSecret is the secret key used for JWT token signing and verification
     // In production, this should be loaded from configuration
     jwtSecret       = []byte("jwt_secret_key")
+    // tokenExpiration defines the validity period of JWT tokens
     tokenExpiration = 24 * time.Hour
 )
 
+// Account implements the account management logic layer
 type Account struct{}
 
+// jwtClaims defines the structure for JWT token payload
 type jwtClaims struct {
-    UserID int64 `json:"user_id"`
-    jwt.RegisteredClaims
+    UserID int64 `json:"user_id"` // User's unique identifier
+    jwt.RegisteredClaims          // Standard JWT claims (exp, iat, nbf)
 }
 
+// New creates and returns a new Account instance
 func New() *Account {
     return &Account{}
 }
 
+// RegisterInput defines the required fields for user registration
 type RegisterInput struct {
-    Passport string
-    Password string
-    Email    string
+    Passport string // User's unique identifier (username/phone/etc)
+    Password string // User's password
+    Email    string // User's email address
 }
 
+// Register creates a new user account with the provided registration information
+// Returns the new user's ID and any error encountered during registration
 func (*Account) Register(ctx context.Context, in RegisterInput) (id int64, err error) {
     return dao.User.Ctx(ctx).InsertAndGetId(do.User{
         Passport: in.Passport,
@@ -43,6 +52,8 @@ func (*Account) Register(ctx context.Context, in RegisterInput) (id int64, err e
     })
 }
 
+// Login authenticates a user using their passport and password
+// Returns a JWT token upon successful authentication
 func (*Account) Login(ctx context.Context, passport, password string) (token string, err error) {
     var user *entity.User
     err = dao.User.Ctx(ctx).Where(do.User{
@@ -74,6 +85,8 @@ func (*Account) Login(ctx context.Context, passport, password string) (token str
     return token, nil
 }
 
+// Info retrieves user information using a valid JWT token
+// Returns the user entity if token is valid and user exists
 func (*Account) Info(ctx context.Context, token string) (user *entity.User, err error) {
     claims := &jwtClaims{}
     parsedToken, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
