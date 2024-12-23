@@ -1,26 +1,35 @@
 package words
 
 import (
-	"context"
+    "context"
 
-	"github.com/gogf/gf/v2/os/gtime"
-	"proxima/app/word/internal/model/entity"
+    "proxima/app/word/internal/dao"
+    "proxima/app/word/internal/model/do"
+    "proxima/app/word/internal/model/entity"
 )
 
-func Create(ctx context.Context) (id uint, err error) {
-	return 1, nil
+type Words struct {
 }
 
-func Get(ctx context.Context) (word *entity.Words, err error) {
-	return &entity.Words{
-		Id:                 1,
-		Uid:                1,
-		Word:               "hello",
-		Definition:         "used as a greeting when you meet somebody.",
-		ExampleSentence:    "Hello, I am oldme!",
-		ChineseTranslation: "你好",
-		Pronunciation:      "həˈləʊ",
-		CreatedAt:          gtime.New("2024-12-05 22:00:00"),
-		UpdatedAt:          gtime.New("2024-12-05 22:00:00"),
-	}, nil
+func New() *Words {
+    return &Words{}
+}
+
+type CreateInput struct {
+    Uid        uint32
+    Word       string
+    Definition string
+}
+
+func (*Words) Create(ctx context.Context, in CreateInput) (id int64, err error) {
+    return dao.Words.Ctx(ctx).Data(do.Words{
+        Uid:        in.Uid,
+        Word:       in.Word,
+        Definition: in.Definition,
+    }).InsertAndGetId()
+}
+
+func (*Words) Get(ctx context.Context, id uint32) (word *entity.Words, err error) {
+    err = dao.Words.Ctx(ctx).WherePri(id).Scan(&word)
+    return
 }

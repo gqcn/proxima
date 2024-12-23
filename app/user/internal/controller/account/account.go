@@ -1,56 +1,56 @@
 package account
 
 import (
-	"context"
+    "context"
 
-	"github.com/gogf/gf/contrib/rpc/grpcx/v2"
-	"google.golang.org/protobuf/types/known/timestamppb"
-	v1 "proxima/app/user/api/account/v1"
-	"proxima/app/user/api/pbentity"
-	"proxima/app/user/internal/logic/account"
+    v1 "proxima/app/user/api/account/v1"
+    "proxima/app/user/internal/logic/account"
+
+    "github.com/gogf/gf/contrib/rpc/grpcx/v2"
+    "github.com/gogf/gf/v2/util/gconv"
 )
 
 type Controller struct {
-	v1.UnimplementedAccountServer
+    v1.UnimplementedAccountServer
+    account *account.Account
 }
 
 func Register(s *grpcx.GrpcServer) {
-	v1.RegisterAccountServer(s.Server, &Controller{})
+    v1.RegisterAccountServer(s.Server, &Controller{
+        account: account.New(),
+    })
 }
 
-func (*Controller) UserRegister(ctx context.Context, req *v1.UserRegisterReq) (res *v1.UserRegisterRes, err error) {
-	id, err := account.Register(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return &v1.UserRegisterRes{
-		Id: int32(id),
-	}, nil
+func (c *Controller) Register(ctx context.Context, req *v1.RegisterReq) (res *v1.RegisterRes, err error) {
+    id, err := c.account.Register(ctx, account.RegisterInput{
+        Passport: req.Passport,
+        Password: req.Password,
+        Email:    req.Email,
+    })
+    if err != nil {
+        return nil, err
+    }
+    return &v1.RegisterRes{
+        Id: int32(id),
+    }, nil
 }
 
-func (*Controller) UserLogin(ctx context.Context, req *v1.UserLoginReq) (res *v1.UserLoginRes, err error) {
-	token, err := account.Login(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return &v1.UserLoginRes{
-		Token: token,
-	}, nil
+func (c *Controller) Login(ctx context.Context, req *v1.LoginReq) (res *v1.LoginRes, err error) {
+    token, err := c.account.Login(ctx, req.Passport, req.Passport)
+    if err != nil {
+        return nil, err
+    }
+    return &v1.LoginRes{
+        Token: token,
+    }, nil
 }
 
-func (*Controller) UserInfo(ctx context.Context, req *v1.UserInfoReq) (res *v1.UserInfoRes, err error) {
-	data, err := account.Info(ctx, req.Token)
-	if err != nil {
-		return nil, err
-	}
-	return &v1.UserInfoRes{
-		User: &pbentity.Users{
-			Id:        uint32(data.Id),
-			Username:  data.Username,
-			Password:  data.Password,
-			Email:     data.Email,
-			CreatedAt: timestamppb.New(data.CreatedAt.Time),
-			UpdatedAt: timestamppb.New(data.UpdatedAt.Time),
-		},
-	}, nil
+func (c *Controller) Info(ctx context.Context, req *v1.InfoReq) (res *v1.InfoRes, err error) {
+    entityData, err := c.account.Info(ctx, req.Token)
+    if err != nil {
+        return nil, err
+    }
+    res = &v1.InfoRes{}
+    err = gconv.Scan(entityData, &res.User)
+    return
 }
