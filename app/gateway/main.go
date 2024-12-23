@@ -10,14 +10,11 @@ import (
 )
 
 func main() {
-    var ctx = gctx.New()
-    conf, err := g.Cfg("etcd").Get(ctx, "etcd.address")
-    if err != nil {
-        panic(err)
-    }
-
-    var address = conf.String()
-    grpcx.Resolver.Register(etcd.New(address))
+    var (
+        ctx         = gctx.GetInitCtx()
+        etcdAddress = g.Cfg("etcd").MustGet(ctx, "etcd.address").String()
+    )
+    grpcx.Resolver.Register(etcd.New(etcdAddress))
 
     cmd.Main.Run(ctx)
 }
